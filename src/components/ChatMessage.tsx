@@ -1,0 +1,36 @@
+import { Bot, User } from "lucide-react";
+
+interface ChatMessageProps {
+  role: "user" | "assistant";
+  content: string;
+}
+
+const ChatMessage = ({ role, content }: ChatMessageProps) => {
+  const isUser = role === "user";
+
+  return (
+    <div className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
+      {!isUser && (
+        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 mt-1">
+          <Bot className="w-4 h-4 text-primary-foreground" />
+        </div>
+      )}
+      <div
+        className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
+          isUser
+            ? "bg-user-bubble text-user-bubble-foreground rounded-br-md"
+            : "bg-ai-bubble text-ai-bubble-foreground rounded-bl-md"
+        }`}
+      >
+        {content}
+      </div>
+      {isUser && (
+        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0 mt-1">
+          <User className="w-4 h-4 text-muted-foreground" />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ChatMessage;

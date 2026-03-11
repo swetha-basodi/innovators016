@@ -23,9 +23,10 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: "You are a helpful AI assistant. Keep answers clear, concise, and well-formatted using markdown." },
+          { role: "system", content: "You are a helpful AI assistant. Keep answers clear, concise, and well-formatted using markdown. Use code blocks with language tags, bullet points, and headers when appropriate." },
           ...messages,
         ],
+        stream: true,
       }),
     });
 
@@ -50,11 +51,8 @@ serve(async (req) => {
       });
     }
 
-    const data = await response.json();
-    const text = data.choices?.[0]?.message?.content || "No response generated.";
-
-    return new Response(JSON.stringify({ response: text }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    return new Response(response.body, {
+      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (e) {
     console.error("chat error:", e);
